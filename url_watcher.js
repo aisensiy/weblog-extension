@@ -20,6 +20,8 @@
       var relevantDets = _.pick(tab, RELEVANT_DETAILS);
       _.extend(this.dets, relevantDets);
 
+      console.log("catch event " + eventName);
+
       switch (eventName) {
         case 'mousemove':
           this._refreshTimer();

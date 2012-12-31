@@ -4,18 +4,18 @@
 
   var eventListener = new (require('EventListener'))();
   var api = require('Api');
-  var history = require('History');
+  // var history = require('History');
   var LOGIN_CHECK_DURATION = 5000;
   var DOMAIN = 'http://localhost.delicious.com';
 
 
-  if (!localStorage.historyImported) {
-    history.getAllHistory(function(pageViews) {
-      api.sendPageViews(pageViews, function() {
-        localStorage.historyImported = 'true';
-      });
-    });
-  }
+  // if (!localStorage.historyImported) {
+  //   history.getAllHistory(function(pageViews) {
+  //     api.sendPageViews(pageViews, function() {
+  //       localStorage.historyImported = 'true';
+  //     });
+  //   });
+  // }
   eventListener.addListeners();
 
   chrome.browserAction.onClicked.addListener(function() {

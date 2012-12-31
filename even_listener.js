@@ -6,21 +6,21 @@
       UrlWatcher = require('UrlWatcher'),
       api = require('Api');
 
-  function isAllowedUrl(url) {
-    if (!Util.isValidUrl(url) ||
-        _.include(['demo.d.me', 'd.me'], Util.getHostname(url))) {
-      return false;
-    }
+  // function isAllowedUrl(url) {
+  //   if (!Util.isValidUrl(url) ||
+  //       _.include(['demo.d.me', 'd.me'], Util.getHostname(url))) {
+  //     return false;
+  //   }
 
-    localStorage.blacklist = localStorage.blacklist || '[]';
-    var blacklist = JSON.parse(localStorage.blacklist);
+  //   localStorage.blacklist = localStorage.blacklist || '[]';
+  //   var blacklist = JSON.parse(localStorage.blacklist);
 
-    var result = !_.any(blacklist, function(pattern) {
-      return Util.urlFilter(pattern, url);
-    });
+  //   var result = !_.any(blacklist, function(pattern) {
+  //     return Util.urlFilter(pattern, url);
+  //   });
 
-    return result;
-  }
+  //   return result;
+  // }
 
   var EventListener = function() {
     this._watchers = {};
@@ -32,7 +32,7 @@
     },
 
     onContent: function(request, sender, sendResponse) {
-      if (!isAllowedUrl(request.url)) return;
+      // if (!isAllowedUrl(request.url)) return;
       var watcher = this._getWatcher(request.url);
       watcher.notify(request.event, request);
     },
