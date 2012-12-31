@@ -1,4 +1,5 @@
-(function() {
+window.tab = {};
+var CMD = (function() {
     var cmd = {
         init: function(tabid) {
             window.tab[tabid] = {
@@ -12,7 +13,7 @@
             }
             window.tab[tabid].title = title;
             window.tab[tabid].url = url;
-            tabid.start_at = +new Date();
+            window.tab[tabid].start_at = +new Date();
         },
         clear: function(tabid) {
             delete window.tab[tabid];
@@ -25,5 +26,43 @@
             this.start(tabid, title, url);
         }
     };
+    return cmd;
+})();
 
+// test for cmd
+(function() {
+    // normal flow
+    CMD.init(1);
+    console.log(window.tab[1]);
+    console.assert(window.tab[1]);
+    console.assert(window.tab[1].created_at);
+    CMD.start(1, 'test', 'http://example.com');
+    console.log(window.tab[1]);
+    console.assert(window.tab[1].title == 'test');
+    console.assert(window.tab[1].url == 'http://example.com');
+    console.assert(window.tab[1].start_at);
+    CMD.clear(1);
+    console.assert(!window.tab[1]);
+    console.log(window.tab[1]);
+
+    // update
+    CMD.init(2);
+    console.log(window.tab[2]);
+    console.assert(window.tab[2]);
+    console.assert(window.tab[2].created_at);
+    CMD.start(2, 'test', 'http://example.com');
+    console.log(window.tab[2]);
+    console.assert(window.tab[2].title == 'test');
+    console.assert(window.tab[2].url == 'http://example.com');
+    console.assert(window.tab[2].start_at);
+    var old_start_at = window.tab[2].start_at;
+    CMD.update(2);
+    console.log(window.tab[2]);
+    console.assert(window.tab[2].title == 'test');
+    console.assert(window.tab[2].url == 'http://example.com');
+    console.assert(window.tab[2].start_at);
+    console.assert(window.tab[2].start_at != old_start_at);
+    CMD.clear(1);
+    console.assert(!window.tab[1]);
+    console.log(window.tab[1]);
 })();
