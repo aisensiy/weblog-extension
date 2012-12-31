@@ -1,0 +1,10 @@
+{
+    "name": "web-log-extension",
+    "version": "0.1",
+    "manifest_version": 2,
+    "description": "tracke history and bookmark for chrome browser.",
+    "permissions": ["tabs", "storage", "<all_urls>"],
+    "background": {
+        "scripts": ["bg.js"]
+    }
+}
