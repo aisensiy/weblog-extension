@@ -1,6 +1,6 @@
 (function() {
   var RELEVANT_DETAILS = ['title'];
-  var INACTIVITY_TIMEOUT = 60 * 1000;
+  var INACTIVITY_TIMEOUT = 2 * 60 * 1000;
 
   var UrlWatcher = function(url, onInactivate) {
     
@@ -21,6 +21,7 @@
       _.extend(this.dets, relevantDets);
 
       console.log("catch event " + eventName);
+      console.log(tab);
 
       switch (eventName) {
         case 'mousemove':

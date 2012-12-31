@@ -18,13 +18,13 @@
   window.addEventListener('focus', function(e) {
     if (new Date() - lastEvent < SMALLEST_EVENT_INTERVAL) return;
     sendEvent('focus', window.location.href, document.title);
-    lastFocus = +new Date();
+    lastEvent = +new Date();
   });
 
   window.addEventListener('blur', function(e) {
     if (new Date() - lastEvent < SMALLEST_EVENT_INTERVAL) return;
     sendEvent('blur', window.location.href, document.title);
-    lastFocus = +new Date();
+    lastEvent = +new Date();
   });
 
   window.addEventListener('unload', function() {
