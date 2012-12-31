@@ -5,6 +5,20 @@
     "description": "tracke history and bookmark for chrome browser.",
     "permissions": ["tabs", "storage", "<all_urls>"],
     "background": {
-        "scripts": ["bg.js"]
-    }
+        "scripts": [
+            "underscore.js",
+            "jquery-1.7.2.min.js",
+            "package.js",
+            "api.js",
+            "url_watcher.js",
+            "even_listener.js",
+            "background.js"
+        ]
+    },
+    "content_scripts": [
+        {
+            "matches": ["<all_urls>"],
+            "js": ["common/js/content.js"]
+        }
+    ],
 }

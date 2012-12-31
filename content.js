@@ -1,31 +1,30 @@
 (function() {
 
-  var scrollTime = 0,
-    lastFocus = 0;
+  var scrollTime = 0;
+  var lastEvent = 0;
+  var SMALLEST_EVENT_INTERVAL = 500;
+  var SMALLEST_MOUSE_INTERVAL = 10000;
 
-  /**
-   * http://js8.in/682.html smallest dom ready
-   */
-  function r(f) {
-    /in/.test(document.readyState) ? setTimeout(function() { r(f); }, 9) : f();
-  }
+  sendEvent('domready', window.location.href, document.title);
 
-  r(function() {
-    sendEvent('domready', window.location.href, document.title);
+  window.addEventListener('mousemove', function() {
+    var now = new Date().getTime();
+    if (now - scrollTime > SMALLEST_MOUSE_INTERVAL) {
+      scrollTime = now;
+      sendEvent('mousemove', window.location.href, document.title);
+    }
+  });
 
-    window.addEventListener('mousemove', function() {
-      var now = new Date().getTime();
-      if (now - scrollTime > 10000) {
-        scrollTime = now;
-        sendEvent('mousemove', window.location.href, document.title);
-      }
-    });
+  window.addEventListener('focus', function(e) {
+    if (new Date() - lastEvent < SMALLEST_EVENT_INTERVAL) return;
+    sendEvent('focus', window.location.href, document.title);
+    lastFocus = +new Date();
+  });
 
-    window.addEventListener('focus', function(e) {
-      if (new Date() - lastFocus < 500) return;
-      sendEvent('focus', window.location.href, document.title);
-      lastFocus = +new Date();
-    });
+  window.addEventListener('blur', function(e) {
+    if (new Date() - lastEvent < SMALLEST_EVENT_INTERVAL) return;
+    sendEvent('blur', window.location.href, document.title);
+    lastFocus = +new Date();
   });
 
   window.addEventListener('unload', function() {

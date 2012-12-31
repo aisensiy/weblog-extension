@@ -6,12 +6,9 @@
       UrlWatcher = require('UrlWatcher'),
       api = require('Api');
 
-  function isAllowed(obj) {
-    var url = obj.url,
-        title = obj.title;
+  function isAllowedUrl(url) {
     if (!Util.isValidUrl(url) ||
-        _.include(['demo.d.me', 'd.me'], Util.getHostname(url)) ||
-        url === title) {
+        _.include(['demo.d.me', 'd.me'], Util.getHostname(url))) {
       return false;
     }
 
@@ -35,7 +32,7 @@
     },
 
     onContent: function(request, sender, sendResponse) {
-      if (!isAllowed(request)) return;
+      if (!isAllowedUrl(request.url)) return;
       var watcher = this._getWatcher(request.url);
       watcher.notify(request.event, request);
     },
@@ -53,7 +50,9 @@
 
     _removeWatcher: function(watcher) {
       delete this._watchers[watcher.url];
-      api.sendPageView(watcher.dets, function() {});
+      if (watcher.dets.duration) {
+        api.sendPageView(watcher.dets, function() {});
+      }
     }
   };
 

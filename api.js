@@ -1,10 +1,22 @@
 (function() {
     var url_prefix = '';
-    function upload_data(tabid, obj) {
-        // $.post('/api/uploaddata', obj, function() {
-        //     cmd.clear(tabid);
-        // });
-        console.log("duration: " + (new Date() - obj.start_at));
+
+    function Api() {
+        this.url_prefix = '';
     }
 
+    Api.prototype = {
+        construtor: Api,
+        sendPageView: function(pageview, success) {
+            // $.ajax({
+            //     url: '/api/uploaddata',
+            //     type: 'POST',
+            //     data: pageview,
+            //     success: success
+            // });
+            console.log(pageview);
+        }
+    };
+
+    provide('Api', new Api());
 })();

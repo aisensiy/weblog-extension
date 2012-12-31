@@ -1,41 +1,35 @@
-function extend(obj1, obj2) {
-  var prop;
-  for(prop in obj1) {
-    obj1[prop] = obj2[prop];
-  }
-}
-
-UrlWatcher = (function() {
+(function() {
   var RELEVANT_DETAILS = ['title'];
+  var INACTIVITY_TIMEOUT = 60 * 1000;
 
-  var INACTIVITY_TIMOUT = 2 * 60 * 1000;
-  // var INACTIVITY_TIMOUT = 5 * 1000;
-
-  var UrlWatcher = function(title, url, onInactivate) {
+  var UrlWatcher = function(url, onInactivate) {
     
-    this.title = title;
     this.url = url;
     this.onInactivate = onInactivate;
     this.dets = {
-      title: title,
       url: url,
-      created_at: +new Date()
+      startTime: new Date().getTime(),
+      reactiveTime: new Date().getTime(),
+      duration: 0
     };
     this._resetTimer();
   };
 
   UrlWatcher.prototype = {
     notify: function(eventName, tab) {
-      var title = tab.title;
-      var url = tab.url;
-
-
+      var relevantDets = _.pick(tab, RELEVANT_DETAILS);
+      _.extend(this.dets, relevantDets);
 
       switch (eventName) {
         case 'mousemove':
+          this._refreshTimer();
+          break;
         case 'focus':
         case 'domready':
           this._resetTimer();
+          break;
+        case 'blur':
+          this.goPauseTimer();
           break;
         case 'tab.onRemoved':
         case 'unload':
@@ -43,22 +37,31 @@ UrlWatcher = (function() {
           break;
       }
 
-      
     },
 
     goInactive: function() {
       clearTimeout(this.tid);
-
+      this.goPauseTimer();
       this.dets.endTime = new Date().getTime();
       this.onInactivate();
     },
 
-    _resetTimer: function() {
+    goPauseTimer: function() {
       clearTimeout(this.tid);
+      this.dets.duration += new Date() - this.dets.reactiveTime;
+    },
 
-      this.tid = setTimeout(this.goInactive.bind(this), INACTIVITY_TIMOUT);
+    _resetTimer: function() {
+      this._refreshTimer();
+
+      this.dets.reactiveTime = new Date();
+    },
+
+    _refreshTimer: function() {
+      clearTimeout(this.tid);
+      this.tid = setTimeout(this.goInactive.bind(this), INACTIVITY_TIMEOUT);
     }
   };
 
-  return UrlWatcher;
+  provide('UrlWatcher', UrlWatcher);
 }());
