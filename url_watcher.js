@@ -1,6 +1,6 @@
 (function() {
   var RELEVANT_DETAILS = ['title'];
-  var INACTIVITY_TIMEOUT = 2 * 60 * 1000;
+  var INACTIVITY_TIMEOUT = 60 * 1000;
 
   var UrlWatcher = function(url, onInactivate) {
     
@@ -36,6 +36,7 @@
           break;
         case 'tab.onRemoved':
         case 'unload':
+        case 'hashchange':
           this.goInactive();
           break;
       }
@@ -50,8 +51,14 @@
     },
 
     goPauseTimer: function() {
+      console.log('go pause and go in active if no action ' + this.url);
       clearTimeout(this.tid);
       this.dets.duration += new Date() - this.dets.reactiveTime;
+      var self = this;
+      this.tid = setTimeout(function() {
+        self.dets.endTime = +new Date();
+        self.onInactivate();
+      }, INACTIVITY_TIMEOUT);
     },
 
     _resetTimer: function() {

@@ -4,7 +4,9 @@
             'page_view[url]': pageView.url,
             'page_view[title]': pageView.title,
             'page_view[start_time]': parseInt(pageView.startTime, 10),
-            'page_view[duration]': parseInt(pageView.duration, 10)
+            'page_view[duration]': parseInt(pageView.duration, 10),
+            'page_view[end_time]': parseInt(pageView.endTime, 10)
+
         };
     }
     var url_prefix = 'http://ali:3000';
