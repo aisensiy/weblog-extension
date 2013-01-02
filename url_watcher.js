@@ -45,7 +45,7 @@
 
     goInactive: function() {
       clearTimeout(this.tid);
-      this.goPauseTimer();
+      this.dets.duration += new Date() - this.dets.reactiveTime;
       this.dets.endTime = new Date().getTime();
       this.onInactivate();
     },
@@ -54,9 +54,10 @@
       console.log('go pause and go in active if no action ' + this.url);
       clearTimeout(this.tid);
       this.dets.duration += new Date() - this.dets.reactiveTime;
+      var now = +new Date();
       var self = this;
       this.tid = setTimeout(function() {
-        self.dets.endTime = +new Date();
+        self.dets.endTime = now;
         self.onInactivate();
       }, INACTIVITY_TIMEOUT);
     },
