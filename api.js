@@ -1,13 +1,13 @@
 (function() {
     function pageViewAdapter(pageView) {
         return {
-            'url': pageView.url,
-            'title': pageView.title,
-            'start_time': pageView.startTime,
-            'duration': pageView.duration
+            'page_view[url]': pageView.url,
+            'page_view[title]': pageView.title,
+            'page_view[start_time]': parseInt(pageView.startTime, 10),
+            'page_view[duration]': parseInt(pageView.duration, 10)
         };
     }
-    var url_prefix = '';
+    var url_prefix = 'http://ali:3000';
 
     function Api() {
         this.url_prefix = '';
@@ -17,13 +17,13 @@
         construtor: Api,
         sendPageView: function(pageview, success) {
             pageview = pageViewAdapter(pageview);
-            // $.ajax({
-            //     url: '/api/uploaddata',
-            //     type: 'POST',
-            //     data: pageview,
-            //     success: success
-            // });
-            console.log(pageview);
+            $.ajax({
+                url: url_prefix + '/api/uploaddata.json',
+                type: 'POST',
+                data: pageview,
+                success: success
+            });
+            // console.log(pageview);
         }
     };
 
